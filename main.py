@@ -1,7 +1,7 @@
 import questionary
-from db import no_habit_exists, create_db
 from datetime import datetime
-
+from db import no_habit_exists, create_db
+from habit_class import Habit
 
 def cli():
     """
@@ -67,9 +67,9 @@ def cli():
                                             "Daily", 
                                             "Weekly"
                                             ]).ask()
-                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")                        
-                    habit = Habit(name, habit_description, habit_periodicity, timestamp)
-                    habit.store(db)
+                    creation_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")                        
+                    habit = Habit(name, habit_description, habit_periodicity, creation_time)
+                    habit.save_new_habit(db)
                     print(f"Your new habit {name} has been successfully created!")
     
 

@@ -48,4 +48,21 @@ def no_habit_exists(db, name):
     return result_exists
 
 
+def add_new_habit(db, name, description, created, periodicity):
+    """
+    Add new habit to habit table.
+
+    :param db: the created sqlite3 database main.db
+    :param name: name of the new habit
+    :param description: short description of the new habit
+    :param created: timestamp of creating the new habit
+    :param periodicity: periodicity of the new habit
+    """
+    cur = db.cursor()
+    cur.execute("INSERT OR REPLACE INTO habit VALUES (?, ?, ?, ?)", 
+                (name, description, created, periodicity))
+    db.commit()
+
+
+
 
