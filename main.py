@@ -58,7 +58,7 @@ def cli():
             elif select == "Create a new habit":
                 name = (questionary.text(
                                 "What is the name of your new habit?").ask()).lower()
-                if no_habit_exists(db, name) == True:
+                if no_habit_exists(db, name) == False:
                     print("The Habit already exists, please select another name!")
                 else:
                     habit_description = (questionary.text(
@@ -151,11 +151,11 @@ def cli():
                                                     ]).ask()
                 if periodicity == "Daily":
                     names_of_daily_habits = get_habit_names_by_periodicity(db, periodicity)
-                    result = get_longest_daily_streak(db, names_of_daily_habits)
+                    get_longest_daily_streak(db, names_of_daily_habits)
                 elif periodicity == "Weekly":
                     names_of_weekly_habits = get_habit_names_by_periodicity(db, periodicity)
-                    result = get_longest_weekly_streak(db, names_of_weekly_habits)
-                return result
+                    get_longest_weekly_streak(db, names_of_weekly_habits)
+                    
                     
 
 
