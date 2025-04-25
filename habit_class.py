@@ -1,4 +1,4 @@
-from db import add_new_habit
+from db import add_new_habit, checkoff_habit
 
 
 class Habit:
@@ -26,4 +26,13 @@ class Habit:
         :param db: sqlite3 database main.db
         """
         add_new_habit(db, self.name, self.description, self.created, self.periodicity)
+
+    def add_checkoff_event(self, db, date: str = None):
+        """
+        Add check off event to the database, either todays date or a retrospective date.
+
+        :param db: created sqlite3 database main.db
+        :param date: date of the check off event
+        """
+        checkoff_habit(db, self.name, date)
 

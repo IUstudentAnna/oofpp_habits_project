@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date
 
 def create_db(name="main.db"):
     """
@@ -63,6 +64,19 @@ def add_new_habit(db, name, description, created, periodicity):
                 (name, description, created, periodicity))
     db.commit()
 
+def checkoff_habit(db, name, checkoff_date=None):
+    """
+    check off a existing habit. If no checkoff_date is given, the habit is checked off for today.
+    If a checkoff_date is given, the habit is checked off retrospective.
 
+    :param db: the created sqlite3 database main.db
+    :param name: name of the existing habit
+    :param checkoff_date: today's date or a given retrospecitve date of the check off
+    """
+    cur = db.cursor()
+    if not checkoff_date:
+        checkoff_date = str(date.today())
+    cur.execute("INSERT INTO habit_records VALUES (?, ?)", (checkoff_date, name))
+    db.commit()
 
 

@@ -71,6 +71,39 @@ def cli():
                     habit = Habit(name, habit_description, habit_periodicity, creation_time)
                     habit.save_new_habit(db)
                     print(f"Your new habit {name} has been successfully created!")
+            
+            elif select == "Checkoff an existing habit":
+                name = (questionary.text(
+                            "What is the name of your habit you succeeded today?").\
+                                ask()).lower()
+                if no_habit_exists(db, name) == True:
+                    print("The Habit does not exist, please create first!")
+                else:
+                    habit = Habit(name, "no description", "no periodicity", "no creation timestamp")
+                    # habit.checkoff()
+                    habit.add_checkoff_event(db)
+                    print(f"Your habit {name} has been successfully checked off! Well done!")
+        
+            elif select == "Checkoff an existing habit retrospecitvely":
+                name = (questionary.text("You forgott to checkoff a habit? No problem! What is the name of your habit you want to checkoff retrospectively?").\
+                                    ask()).lower()
+                if no_habit_exists(db, name) == True:
+                    print("The Habit does not exist, please create first!")
+                else:
+                    print("Please insert the checkoff date in the following format: yyyy-mm-dd")
+                    retrospective_date = (questionary.text("What is the date of the checkoff?").ask())
+                    retrospective_date_reformated = datetime.strptime(retrospective_date, '%Y-%m-%d')
+                    if retrospective_date_reformated > datetime.today():
+                        print("The date you want to insert is in the future, please try again.")
+                        question = True
+                    else:
+                        habit = Habit(name, "no description", "no periodicity", "no creation timestamp")
+                        habit.add_checkoff_event(db, date = retrospective_date)
+                        print(f"Your habit {name} has been successfully checked off for {retrospective_date}! Well done!")
+        
+
+            
+
     
 
 
