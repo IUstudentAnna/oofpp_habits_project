@@ -47,7 +47,11 @@ def no_habit_exists(db, name):
     cur = db.cursor()
     cur.execute("SELECT name FROM habit WHERE name=?", (name,))
     result_exists = cur.fetchall()
-    return result_exists
+
+    if not result_exists:
+        return True
+    else:
+        return False
 
 
 def add_new_habit(db, name, description, created, periodicity):
@@ -115,3 +119,44 @@ def get_all_habits_by_periodicity(db, periodicity):
     cur.execute("SELECT name, created FROM habit WHERE periodicity=?", (periodicity, ))
     return cur.fetchall()
 
+def get_habit_names_by_periodicity(db, periodicity):
+    """
+    Get all habit names from the habit table for one periodicity.
+
+    :param db: the created sqlite3 database main.db
+    :param periodicity: periodicity daily or weekly
+    :return: list of all habit names for a given periodicity
+    """
+    query = f"SELECT name FROM habit WHERE periodicity='{periodicity}'"
+    df_raw = pd.read_sql(query, db)
+    df_pandas = pd.DataFrame(df_raw)
+    df = df_pandas["name"].tolist()
+    return df
+
+
+def periodicity_per_habit(db, name):
+    """
+    Get distinct periodicity for a chosen habit.
+
+    :param db: the created sqlite3 database main.db
+    :param name: name of the habit 
+    :return: periodicity as string
+    """
+    query = f"SELECT DISTINCT periodicity FROM habit \
+            INNER JOIN habit_records ON habit_records.habitName = \
+            habit.name WHERE name= '{name}'"
+    unique_periodicity = pd.read_sql(query, db)
+    periodicity_value = unique_periodicity['periodicity'].iloc[0]
+    return periodicity_value
+
+def delete_habit(db, name):
+    """
+    Delete all data for the chosen habit
+    
+    :param db: the created sqlite3 database main.db
+    :param name: name of the habit to delete
+    """
+    cur = db.cursor()
+    cur.execute("DELETE FROM habit WHERE name=?", (name,))
+    cur.execute("DELETE FROM habit_records WHERE habitName=?", (name,))
+    db.commit()
