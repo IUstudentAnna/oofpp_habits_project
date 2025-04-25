@@ -115,7 +115,7 @@ def cli():
             if select == "Return all habits":
                 result = get_all_habits(db)
                 print("List of all your tracked habits and their periodicity:")
-                print("Habit - Periodicity - Date of creation")
+                print("Habit - Description - Periodicity - Date of creation")
                 print("")
                 for current_habit in sorted(set(result)):
                     print(' - '.join(current_habit))
