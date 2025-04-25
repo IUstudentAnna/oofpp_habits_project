@@ -116,7 +116,7 @@ def get_all_habits_by_periodicity(db, periodicity):
     :return: list of all habits in the habit table
     """
     cur = db.cursor()
-    cur.execute("SELECT name, created FROM habit WHERE periodicity=?", (periodicity, ))
+    cur.execute("SELECT name, description, created FROM habit WHERE periodicity=?", (periodicity, ))
     return cur.fetchall()
 
 def get_habit_names_by_periodicity(db, periodicity):

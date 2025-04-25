@@ -129,7 +129,7 @@ def cli():
                                                     ]).ask()
                 result = get_all_habits_by_periodicity(db, periodicity)
                 print(f"List of all you {periodicity} habits:")
-                print("Habit - Date of creation")
+                print("Habit - Description - Date of creation")
                 print("")
                 for current_habit in sorted(set(result)):
                     print(' - '.join(current_habit))
