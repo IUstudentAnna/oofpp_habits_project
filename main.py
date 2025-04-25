@@ -1,7 +1,8 @@
 import questionary
 from datetime import datetime
-from db import no_habit_exists, create_db, get_all_habits, get_all_habits_by_periodicity
+from db import no_habit_exists, create_db, get_all_habits, get_all_habits_by_periodicity, get_habit_names_by_periodicity
 from habit_class import Habit
+from analyze import get_longest_streak_per_habit, get_longest_daily_streak, get_longest_weekly_streak
 
 def cli():
     """
@@ -50,7 +51,7 @@ def cli():
                     print("The Habit does not exist, please create first!")
                 else:
                     habit = (Habit(name, "no description", "no periodicity",  "no creation timestamp"))
-                    habit.clear_habit(db)
+                    habit.delete_habit(db)
                     print(f"Your habit {name} has been successfully deleted!")
 
 
@@ -133,6 +134,28 @@ def cli():
                 for current_habit in sorted(set(result)):
                     print(' - '.join(current_habit))
                 print("")
+
+            elif select == "Return longest streak for one habit":
+                name = (questionary.text("What is the name of your habit you want to get the longest streak for?").\
+                            ask()).lower()
+                if no_habit_exists(db, name) == True:
+                    print("The Habit does not exist, please create it first!")
+                else:
+                    get_longest_streak_per_habit(db, name)
+
+            elif select == "Return longest streak per periodicity":
+                periodicity = questionary.select("Choose one periodicity.",
+                                                choices=[
+                                                    "Daily",
+                                                    "Weekly"
+                                                    ]).ask()
+                if periodicity == "Daily":
+                    names_of_daily_habits = get_habit_names_by_periodicity(db, periodicity)
+                    result = get_longest_daily_streak(db, names_of_daily_habits)
+                elif periodicity == "Weekly":
+                    names_of_weekly_habits = get_habit_names_by_periodicity(db, periodicity)
+                    result = get_longest_weekly_streak(db, names_of_weekly_habits)
+                return result
                     
 
 
