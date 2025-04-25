@@ -77,10 +77,8 @@ def get_longest_weekly_streak(db, names_list):
                     date_end = df_weekly_name.iloc[len(df_weekly_name) - 1, 4]
                     if date1 == date2:
                         streak += 0
-                        counter += 1
-                    elif date1 + timedelta(days=7) == date2 and date_end >= pd.Timestamp.today() - timedelta(days=1):
+                    elif date1 + timedelta(days=7) == date2 and date_end >= pd.Timestamp.today() - timedelta(days=7):
                         streak += 1
-                        counter += 1
                     else:
                         streak = 0
                     counter += 1
