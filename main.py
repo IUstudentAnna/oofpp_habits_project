@@ -1,6 +1,6 @@
 import questionary
 from datetime import datetime
-from db import no_habit_exists, create_db
+from db import no_habit_exists, create_db, get_all_habits, get_all_habits_by_periodicity
 from habit_class import Habit
 
 def cli():
@@ -34,6 +34,7 @@ def cli():
             print("Bye bye and see you later!\n")
             question = False
 
+        # Habit management module
         elif choice == "Manage my habits":
             select = questionary.select("What do you want to do?",
                         choices=["Create a new habit",
@@ -100,6 +101,40 @@ def cli():
                         habit.add_checkoff_event(db, date = retrospective_date)
                         print(f"Your habit {name} has been successfully checked off for {retrospective_date}! Well done!")
         
+        
+            # Analytics module
+        elif choice == "Analyse my habits":
+            select = questionary.select("What do you want to do?\n",
+                                            choices=["Return all habits",
+                                                    "Return all habits by periodicity",
+                                                    "Return longest streak for one habit",
+                                                    "Return longest streak per periodicity",
+                                                    ]).ask()
+                
+            if select == "Return all habits":
+                result = get_all_habits(db)
+                print("List of all your tracked habits and their periodicity:")
+                print("Habit - Periodicity - Date of creation")
+                print("")
+                for current_habit in sorted(set(result)):
+                    print(' - '.join(current_habit))
+                print("")
+
+            elif select == "Return all habits by periodicity":
+                periodicity = questionary.select("Choose one periodicity!",
+                                                choices=[
+                                                    "Daily",
+                                                    "Weekly"
+                                                    ]).ask()
+                result = get_all_habits_by_periodicity(db, periodicity)
+                print(f"List of all you {periodicity} habits:")
+                print("Habit - Date of creation")
+                print("")
+                for current_habit in sorted(set(result)):
+                    print(' - '.join(current_habit))
+                print("")
+                    
+
 
 
 if __name__ == '__main__':

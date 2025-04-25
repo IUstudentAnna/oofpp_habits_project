@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import date
+import pandas as pd
 
 def create_db(name="main.db"):
     """
@@ -79,4 +80,38 @@ def checkoff_habit(db, name, checkoff_date=None):
     cur.execute("INSERT INTO habit_records VALUES (?, ?)", (checkoff_date, name))
     db.commit()
 
+def get_all_habit_data(db):
+    """
+    Get all data for all habits in database.
+
+    :param db: the created sqlite3 database main.db
+    :return: table with name, creation date, periodicity and check offs for all tracked habits
+    """
+    df = pd.read_sql("""SELECT name, created, periodicity, date FROM habit 
+                INNER JOIN habit_records ON habit_records.habitName = habit.name""", 
+                db)
+    return df
+
+def get_all_habits(db):
+    """
+    Get all habits from the habit table
+
+    :param db: the created sqlite3 database main.db
+    :return: list of all habits in the habit table
+    """
+    cur = db.cursor()
+    cur.execute("SELECT name, periodicity, created FROM habit")
+    return cur.fetchall()
+
+def get_all_habits_by_periodicity(db, periodicity):
+    """
+    Get all habits from the habit table filtered by periodicity
+    
+    :param db: the created sqlite3 database main.db
+    :param periodicity: weekly or daily
+    :return: list of all habits in the habit table
+    """
+    cur = db.cursor()
+    cur.execute("SELECT name, created FROM habit WHERE periodicity=?", (periodicity, ))
+    return cur.fetchall()
 
