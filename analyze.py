@@ -13,9 +13,7 @@ def get_longest_streak_per_habit(db, name):
 
     # Get unique periodicity for habit
     periodicity_value = periodicity_per_habit(db, name)
-    print(periodicity_value)
     if periodicity_value == "Weekly":
-        print("start fct get_longest_weekly_streak")
         get_longest_weekly_streak(db, {name})
     elif periodicity_value == "Daily":
         get_longest_daily_streak(db, {name}) 
@@ -49,8 +47,6 @@ def get_longest_daily_streak(db, names_list):
                         streak = 0
                     counter += 1
         dict_streak_habit[name] = streak
-        print(dict_streak_habit)
-
 
     # Get habit with maximum streaks
     max_habit = max(dict_streak_habit, key=dict_streak_habit.get)
