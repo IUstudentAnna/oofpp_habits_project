@@ -1,4 +1,4 @@
-from db import add_new_habit, checkoff_habit
+from db import add_new_habit, checkoff_habit, delete_habit
 
 
 class Habit:
@@ -35,4 +35,12 @@ class Habit:
         :param date: date of the check off event
         """
         checkoff_habit(db, self.name, date)
+    
+    def delete_habit(self, db):
+        """
+        Delete the complete habit
+
+        :param db: sqlite3 database main.db
+        """
+        delete_habit(db, self.name)
 
