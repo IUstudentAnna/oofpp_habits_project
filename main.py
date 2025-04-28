@@ -141,7 +141,9 @@ def cli():
                 if no_habit_exists(db, name) == True:
                     print("The Habit does not exist, please create it first!")
                 else:
-                    get_longest_streak_per_habit(db, name)
+                    longest_streak = get_longest_streak_per_habit(db, name)
+                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: {longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streaks!")
+
 
             elif select == "Return longest streak per periodicity":
                 periodicity = questionary.select("Choose one periodicity.",
@@ -151,10 +153,14 @@ def cli():
                                                     ]).ask()
                 if periodicity == "Daily":
                     names_of_daily_habits = get_habit_names_by_periodicity(db, periodicity)
-                    get_longest_daily_streak(db, names_of_daily_habits)
+                    longest_streak = get_longest_daily_streak(db, names_of_daily_habits)
+                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: {longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streaks!")
+
                 elif periodicity == "Weekly":
                     names_of_weekly_habits = get_habit_names_by_periodicity(db, periodicity)
-                    get_longest_weekly_streak(db, names_of_weekly_habits)
+                    longest_streak = get_longest_weekly_streak(db, names_of_weekly_habits)
+                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: {longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streaks!")
+                    
                     
                     
 
