@@ -68,7 +68,7 @@ def get_longest_daily_streak(db, names_list):
         }
 
 def get_longest_weekly_streak(db, names_list):
-     """
+    """
     Get the longest weekly streak of all weekly habits.
 
     :param name_list: name list of all weekly habits
@@ -80,7 +80,6 @@ def get_longest_weekly_streak(db, names_list):
     df_weekly = df[df['periodicity'] == 'Weekly'].sort_values('date')
     df_weekly['date'] = pd.to_datetime(df_weekly['date'])
     df_weekly['week_start'] = df_weekly['date'] - pd.to_timedelta(df_weekly['date'].dt.weekday, unit='d')
-
     col_names = names_list
     # Calculate maximum streak for each habit and add it to the dict
     dict_streak_habit = {}
@@ -114,7 +113,7 @@ def get_longest_weekly_streak(db, names_list):
     max_streak = dict_streak_habit[max_habit]
 
     return {
-        "periodicity": "daily",
+        "periodicity": "weekly",
         "max_habit": max_habit, 
         "max_streak": max_streak
         }
