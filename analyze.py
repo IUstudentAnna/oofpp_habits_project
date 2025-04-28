@@ -6,7 +6,7 @@ def get_longest_streak_per_habit(db, name):
     """
     Get the longest streak of a chosen habit.
 
-    :param habit_name: name of the chose habit
+    :param name: name of the chose habit
     :param db: the created sqlite3 database main.db
     :return: overall record streak for the chosen habit   
     """
@@ -14,12 +14,20 @@ def get_longest_streak_per_habit(db, name):
     # Get unique periodicity for habit
     periodicity_value = periodicity_per_habit(db, name)
     if periodicity_value == "Weekly":
-        get_longest_weekly_streak(db, {name})
+        return get_longest_weekly_streak(db, {name})
     elif periodicity_value == "Daily":
-        get_longest_daily_streak(db, {name}) 
+        return get_longest_daily_streak(db, {name}) 
 
 
 def get_longest_daily_streak(db, names_list):
+    """
+    Get the longest daily streak of all daily habits.
+
+    :param name_list: name list of all daily habits
+    :param db: the created sqlite3 database main.db
+    :return: dictionary with the longest streak of 
+            all daily habits (keys: periodicity, max_habit, max_streak)
+    """
     df = get_all_habit_data(db)
     df['date'] = pd.to_datetime(df['date'])
     df_daily = df[df['periodicity'] == 'Daily'].sort_values('date')
@@ -29,8 +37,9 @@ def get_longest_daily_streak(db, names_list):
     dict_streak_habit = {}
     for name in col_names:
         df_daily_name= df_daily[df_daily["name"] == name]
+        # print(df_daily_name)
         counter = 0
-        streak = 0
+        max_streak = streak = 0
         count = len(df_daily_name) - 1
         if count == 0:
                 streak = 0
@@ -46,15 +55,27 @@ def get_longest_daily_streak(db, names_list):
                     else:
                         streak = 0
                     counter += 1
-        dict_streak_habit[name] = streak
-
+                    max_streak = max(max_streak, streak)
+        dict_streak_habit[name] = max_streak
     # Get habit with maximum streaks
     max_habit = max(dict_streak_habit, key=dict_streak_habit.get)
     max_streak = dict_streak_habit[max_habit]
-
-    print(f"The longest daily streak is tracked for your habit: {max_habit}, with {max_streak} streaks!")
+    # return a dictionary with the longest streak of all daily habits
+    return {
+        "periodicity": "daily",
+        "max_habit": max_habit, 
+        "max_streak": max_streak
+        }
 
 def get_longest_weekly_streak(db, names_list):
+     """
+    Get the longest weekly streak of all weekly habits.
+
+    :param name_list: name list of all weekly habits
+    :param db: the created sqlite3 database main.db
+    :return: dictionary with the longest streak of 
+            all weekly habits (keys: periodicity, max_habit, max_streak)
+    """
     df = get_all_habit_data(db)
     df_weekly = df[df['periodicity'] == 'Weekly'].sort_values('date')
     df_weekly['date'] = pd.to_datetime(df_weekly['date'])
@@ -66,7 +87,7 @@ def get_longest_weekly_streak(db, names_list):
     for name in col_names:
         df_weekly_name= df_weekly[df_weekly["name"] == name]
         counter = 0
-        streak = 0
+        max_streak = streak = 0
         count = len(df_weekly_name) - 1
         if count == 0:
                 streak = 0
@@ -82,11 +103,19 @@ def get_longest_weekly_streak(db, names_list):
                     else:
                         streak = 0
                     counter += 1
-        dict_streak_habit[name] = streak
-
+                    max_streak = max(streak, max_streak)
+                    # print(streak, max_streak, date1, date2, date_end, pd.Timestamp.today() - timedelta(days=7))
+                    # print(date1 + timedelta(days=7) == date2 )
+                    # print(date_end >= pd.Timestamp.today() - timedelta(days=7))
+        dict_streak_habit[name] = max_streak
+    # print(dict_streak_habit)
     # Get habit with maximum streaks
     max_habit = max(dict_streak_habit, key=dict_streak_habit.get)
     max_streak = dict_streak_habit[max_habit]
 
-    print(f"The longest weekly streak is tracked for your habit: {max_habit}, with {max_streak} streaks!")
+    return {
+        "periodicity": "daily",
+        "max_habit": max_habit, 
+        "max_streak": max_streak
+        }
  
