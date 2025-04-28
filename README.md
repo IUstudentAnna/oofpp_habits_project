@@ -22,13 +22,35 @@ To analyze you habits you can:
 * return your longest streak for a chosen habit
 * return your longest streak for all habits of a chosen periodicity
 
-A streak is defined as completing a task (your defined habit) x consecutive periods (days oder weeks) in a row, without breaking the habit. 
+A streak is defined as completing a task (your defined habit) x consecutive periods (days oder weeks) in a row, without breaking the habit. A habit is considered active, when it is completed on the current period (today or this week).
 
 
-## Usage:
-To start the app use your terminal:
+# Installation
+## Prerequisites
+Python 3.12.7 or later  
+pytest module  
+questionary module
+
+Install requirements:
+```
+pip install questionary
+pip install pytest
+```
+
+## Usage
+- Clone repository to your local computer and got to the folder 'oofpp_habits_project'
+- Run the following command in your command line and follow the instructions using the arrow keys:
 ```
 python main.py
 ```
+## Testing 
+Test the main components with pytest:
+```
+pytest . -v
+```
+
+
+
+
 
 
