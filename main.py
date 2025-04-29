@@ -48,7 +48,7 @@ def cli():
                         "What is the name of your habit you want to delete?").\
                             ask()).lower()
                 if no_habit_exists(db, name) == True:
-                    print("The Habit does not exist, please create first!")
+                    print("The habit does not exist, please create the habit first!")
                 else:
                     habit = (Habit(name, "no description", "no periodicity",  "no creation timestamp"))
                     habit.delete_habit(db)
@@ -59,7 +59,7 @@ def cli():
                 name = (questionary.text(
                                 "What is the name of your new habit?").ask()).lower()
                 if no_habit_exists(db, name) == False:
-                    print("The Habit already exists, please select another name!")
+                    print("The habit already exists, please select another name!")
                 else:
                     habit_description = (questionary.text(
                                          "Please describe your new habit?").ask()).lower()
@@ -79,17 +79,18 @@ def cli():
                             "What is the name of your habit you succeeded today?").\
                                 ask()).lower()
                 if no_habit_exists(db, name) == True:
-                    print("The Habit does not exist, please create first!")
+                    print("The habit does not exist, please create the habit first!")
                 else:
                     habit = Habit(name, "no description", "no periodicity", "no creation timestamp")
                     habit.add_checkoff_event(db)
                     print(f"Your habit {name} has been successfully checked off! Well done!")
         
             elif select == "Check off an existing habit retrospecitvely":
-                name = (questionary.text("You forgott to check off a habit? No problem! What is the name of your habit you want to check off retrospectively?").\
+                name = (questionary.text("You forgott to check off a habit? No problem! " +
+                                          "What is the name of your habit you want to check off retrospectively?").\
                                     ask()).lower()
                 if no_habit_exists(db, name) == True:
-                    print("The Habit does not exist, please create first!")
+                    print("The habit does not exist, please create the habit first!")
                 else:
                     print("Please insert the check off date in the following format: yyyy-mm-dd")
                     retrospective_date = (questionary.text("What is the date of the check off?").ask())
@@ -100,10 +101,10 @@ def cli():
                     else:
                         habit = Habit(name, "no description", "no periodicity", "no creation timestamp")
                         habit.add_checkoff_event(db, date = retrospective_date)
-                        print(f"Your habit {name} has been successfully checked off for {retrospective_date}! Well done!")
-        
-        
-            # Analytics module
+                        print(f"Your habit {name} has been successfully checked off for {retrospective_date}! " +
+                                "Well done!")
+
+        # Analytics module
         elif choice == "Analyse my habits":
             select = questionary.select("What do you want to do?\n",
                                             choices=["Return all habits",
@@ -114,7 +115,7 @@ def cli():
                 
             if select == "Return all habits":
                 result = get_all_habits(db)
-                print("List of all your tracked habits and their periodicity:")
+                print("List of all your tracked habits:")
                 print("Habit - Description - Periodicity - Date of creation")
                 print("")
                 for current_habit in sorted(set(result)):
@@ -139,33 +140,29 @@ def cli():
                 name = (questionary.text("What is the name of your habit you want to get the longest streak for?").\
                             ask()).lower()
                 if no_habit_exists(db, name) == True:
-                    print("The Habit does not exist, please create it first!")
+                    print("The habit does not exist, please create it first!")
                 else:
                     longest_streak = get_longest_streak_per_habit(db, name)
-                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: {longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streaks!")
-
+                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: " +
+                          f"{longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streak(s)!")
 
             elif select == "Return longest streak per periodicity":
                 periodicity = questionary.select("Choose one periodicity.",
-                                                choices=[
-                                                    "Daily",
-                                                    "Weekly"
-                                                    ]).ask()
+                                                choices=["Daily",
+                                                         "Weekly"
+                                                        ]).ask()
                 if periodicity == "Daily":
                     names_of_daily_habits = get_habit_names_by_periodicity(db, periodicity)
                     longest_streak = get_longest_daily_streak(db, names_of_daily_habits)
-                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: {longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streaks!")
-
+                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: " +
+                          f"{longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streak(s)!")
+                    
                 elif periodicity == "Weekly":
                     names_of_weekly_habits = get_habit_names_by_periodicity(db, periodicity)
                     longest_streak = get_longest_weekly_streak(db, names_of_weekly_habits)
-                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: {longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streaks!")
-                    
-                    
-                    
-
-
-
+                    print(f"The longest {longest_streak["periodicity"]} streak is tracked for your habit: " +
+                          f"{longest_streak["max_habit"]}, with {longest_streak["max_streak"]} streak(s)!")
+ 
 if __name__ == '__main__':
     cli()
 
