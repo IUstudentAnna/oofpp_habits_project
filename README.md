@@ -45,6 +45,9 @@ pip install pandas
 ```
 python main.py
 ```
+
+The project comes with sample data in the database. If you desire to start your own, empty database you simply need to delete the main.db file.
+
 ## Testing 
 Test the main components with pytest:
 ```
