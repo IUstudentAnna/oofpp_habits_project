@@ -30,11 +30,13 @@ A **streak** is defined as completing a task (your defined habit) x consecutive 
 Python 3.12.7 or later  
 pytest module  
 questionary module
+pandas module
 
 Install requirements:
 ```
 pip install questionary
 pip install pytest
+pip install pandas
 ```
 
 ## Usage
